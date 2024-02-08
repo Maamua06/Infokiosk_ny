@@ -1,0 +1,28 @@
+<%- include('./partials/header.ejs') -%>
+
+
+
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">Welcome to the Admin Page</h1>
+            </div>
+            <div class="card-body">
+                <!-- Stor boks med tekstboks -->
+                <div class="mb-3">
+                    <label for="textInput" class="form-label">Write something:</label>
+                    <textarea class="form-control" id="textInput" rows="4"></textarea>
+                </div>
+
+                <!-- Mindre boks med bilde eller video -->
+                <div class="mb-3">
+                    <label class="form-label">Upload Image or Video:</label>
+                    <input type="text" class="form-control" placeholder="Paste image or video URL">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<%- include('partials/footer.ejs'); -%>
