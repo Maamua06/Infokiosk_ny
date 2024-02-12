@@ -1,17 +1,16 @@
 <%- include('./partials/header.ejs') -%>
 
-
-
-    <div class="container mt-5">
-        <div class="card">
-            <div class="card-header">
-                <h1 class="card-title">Welcome to the Admin Page</h1>
-            </div>
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">Welcome to the Admin Page</h1>
+        </div>
+        <form action="/" method="post" onsubmit="submitForm(); return false;">
             <div class="card-body">
                 <!-- Stor boks med tekstboks -->
                 <div class="mb-3">
                     <label for="textInput" class="form-label">Write something:</label>
-                    <textarea class="form-control" id="textInput" rows="4"></textarea>
+                    <textarea class="form-control" id="textInput" name="textInput" rows="4"></textarea>
                 </div>
 
                 <!-- Mindre boks med bilde eller video -->
@@ -19,10 +18,41 @@
                     <label class="form-label">Upload Image or Video:</label>
                     <input type="text" class="form-control" placeholder="Paste image or video URL">
                 </div>
+
+                <button type="submit">Submit</button>
             </div>
-        </div>
+        </form>
     </div>
+</div>
 
+<script>
+    // Function to submit the form asynchronously
+    async function submitForm() {
+        const textInput = document.getElementById('textInput').value;
 
+        // Make an AJAX request to the server
+        try {
+            const response = await fetch('/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ textInput }),
+            });
+
+            if (response.ok) {
+                // Show a success alert if the server responds with a successful status
+                alert('Data sent successfully!');
+
+                // Reload the page only if the user clicks OK on the alert
+                location.reload();
+            } else {
+                console.error('Server responded with an error');
+            }
+        } catch (error) {
+            console.error('Error occurred during the request:', error);
+        }
+    }
+</script>
 
 <%- include('partials/footer.ejs'); -%>
