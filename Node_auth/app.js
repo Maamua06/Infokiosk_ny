@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/authRoutes');
+const frontendRoutes = require('./routes/frontendRoutes');
 const Text = require('./models/Textmodel');
 const { requireAuth, checkUser } = require('./middleware/authMiddleware');
 
@@ -21,9 +22,6 @@ app.set('view engine', 'ejs');
 // Database connection
 
 const dbURI = 'mongodb+srv://abuahm0607:test123@nodeove.ngpr07a.mongodb.net/?retryWrites=true&w=majority';
-// mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology:true })
-//         .then(result => app.listen(3002))
-//         .catch(err => console.log(err));
 
 app.listen(3002, () => {
         mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology:true })
@@ -35,8 +33,8 @@ app.listen(3002, () => {
 
 app.get('*', checkUser);
 app.get('/', requireAuth, (req,res) => res.render('home'));
-app.get('/smoothies', requireAuth, (req,res) => res.render('smoothies'));
 app.use(authRoutes);
+app.use(frontendRoutes);
 
 // Funkjson som sender tekst skrevet i tekstboksen på admin page til databasen
 app.post('/', async (req, res) => {

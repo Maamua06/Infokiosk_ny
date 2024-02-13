@@ -1,0 +1,18 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<h1>Infoskjerm</h1>
+
+<h2>Texts from Database:</h2>
+<ul>
+  <% texts.forEach(text => { %>
+    <li><%= text.textInput %></li>
+    <% }); %>
+</ul>
+
+<%- include('partials/footer.ejs'); -%>
