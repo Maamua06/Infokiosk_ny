@@ -17,6 +17,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.1.0",
     "nodemon": "^3.0.2",
+    "sortablejs": "^1.15.2",
     "validator": "^13.11.0"
   }
 }

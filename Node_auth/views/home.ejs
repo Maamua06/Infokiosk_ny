@@ -15,20 +15,150 @@
 
                 <!-- Mindre boks med bilde eller video -->
                 <div class="mb-3">
-                    <label class="form-label">Upload Image or Video:</label>
-                    <input type="text" class="form-control" placeholder="Paste image or video URL">
+                    <label for="imageInput" class="form-label">Upload Image or Video:</label>
+                    <input type="text" class="form-control" id="imageInput" name="imageInput" placeholder="Paste image or video URL">
                 </div>
 
                 <button type="submit">Submit</button>
             </div>
         </form>
     </div>
+
+    
+    <h2>Data List</h2>
+    <ul id="dataList">
+    
+    </ul>
+
 </div>
 
 <script>
+    const dataList = document.getElementById('dataList');
+
+new Sortable(dataList, {
+  onUpdate: async (event) => {
+    const currentOrder = Array.from(dataList.children).map((li, index) => {
+      const itemId = li.dataset.itemId;
+      return { _id: itemId, order: index + 1 };
+    });
+
+    try {
+      const response = await fetch('/api/data/updateOrder', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ newOrder: currentOrder }),
+      });
+
+      if (response.ok) {
+        console.log('Order updated successfully');
+      } else {
+        console.error('Error updating order on the server');
+      }
+    } catch (error) {
+      console.error('Error occurred during the request:', error);
+    }
+  },
+});
+
+    //Henter data fra datbasen og rendrer den 
+    document.addEventListener('DOMContentLoaded', async () => {
+        await fetchDataAndRender();
+    });
+
+    async function  fetchDataAndRender() {
+        try {
+            const response = await fetch('/api/data');
+            if (response.ok) {
+                const data = await  response.json();
+                renderDataList(data);
+            }  else{
+                console.error('Error fetching data')
+            }
+
+        } catch (error) {
+            console.log('Error: error during this request ', error);
+        }
+    };
+
+    function renderDataList(data) {
+    const dataList = document.getElementById('dataList');
+    dataList.innerHTML = '';
+
+    data.forEach((item) => {
+        const itemBox = document.createElement('div');
+        itemBox.className = 'data-item-box'; 
+
+        // Display text input
+        const textParagraph = document.createElement('p');
+        textParagraph.textContent = item.textInput;
+
+        // Display image input kun hvis det er lagt til en bilde url
+        if (item.imageInput) {
+        const imageElement = document.createElement('img');
+        imageElement.src = item.imageInput;
+        imageElement.alt = 'Image';
+        imageElement.style.width = '500px';
+        imageElement.style.height = '500px';
+        itemBox.appendChild(imageElement);  
+        }
+
+        
+
+        itemBox.appendChild(textParagraph);
+        
+        // Create a delete button
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.className = 'delete-button';
+        deleteButton.addEventListener('click', () => deleteItem(item._id)); 
+
+        // Append the box and delete button to the dataList
+        dataList.appendChild(itemBox);
+        dataList.appendChild(deleteButton);
+    });
+}
+
+
+    // Funksjon for å slette data fra databasen
+    async function deleteItem(itemId) {
+        try {
+            const response = await fetch(`/api/data/delete/${itemId}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                alert('Data deleted successfully!');
+                location.reload();
+            } else {
+                console.error('Error deleting data on the server');
+            }
+        } catch (error) {
+            console.error('Error occurred during the request:', error);
+        }
+    };
+
+    async function sortByField(field) {
+    try {
+        const response = await fetch(`/api/data/sort/${field}`);
+        if (response.ok) {
+        const data = await response.json();
+        renderDataList(data);
+        } else {
+        console.error('Error fetching sorted data from the server');
+        }
+    } catch (error) {
+        console.error('Error occurred during the request:', error);
+    }
+    }
+
+
+
     // Function to submit the form asynchronously
     async function submitForm() {
         const textInput = document.getElementById('textInput').value;
+        const imageInput = document.getElementById('imageInput').value;
 
         // Make an AJAX request to the server
         try {
@@ -37,7 +167,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ textInput }),
+                body: JSON.stringify({ textInput, imageInput }),
             });
 
             if (response.ok) {

@@ -137,3 +137,20 @@ footer{
   margin-top: 120px;
   color: #aaa;
 }
+
+
+.data-item-box {
+  display: inline-block;
+  margin-right: 10px;
+  border: 1px solid #ccc; 
+  padding: 10px; 
+}
+
+.delete-button {
+  background-color: #ff6961; 
+  color: #fff; 
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-left: 5px; 
+}
