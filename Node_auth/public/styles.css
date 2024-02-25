@@ -139,18 +139,37 @@ footer{
 }
 
 
+.custom-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .data-item-box {
-  display: inline-block;
-  margin-right: 10px;
-  border: 1px solid #ccc; 
-  padding: 10px; 
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  max-width: 300px;
+  overflow: hidden; /* Hide content overflow */
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Enable vertical scrollbar if content overflows */
+}
+
+.data-item-box img {
+  max-width: 100%;
+  height: auto;
+}
+
+.data-item-box p {
+  margin-bottom: 10px;
 }
 
 .delete-button {
-  background-color: #ff6961; 
-  color: #fff; 
-  border: none;
-  padding: 5px 10px;
+  background-color: rgba(230, 0, 0, 0.8);
+  color: white;
   cursor: pointer;
-  margin-left: 5px; 
+}
+
+.delete-button:hover {
+  background-color: #c00;
 }

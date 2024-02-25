@@ -1,5 +1,6 @@
 <%- include('./partials/header.ejs') -%>
 
+
 <div class="container mt-5">
     <div class="card">
         <div class="card-header">
@@ -86,39 +87,64 @@ new Sortable(dataList, {
     const dataList = document.getElementById('dataList');
     dataList.innerHTML = '';
 
+    // Set a fixed height for each box
+    const fixedBoxHeight = 200; // Set your preferred height
+
+    // Create a container with a custom class
+    const container = document.createElement('div');
+    container.classList.add('custom-container');
+
     data.forEach((item) => {
         const itemBox = document.createElement('div');
-        itemBox.className = 'data-item-box'; 
+        itemBox.className = 'data-item-box';
 
         // Display text input
         const textParagraph = document.createElement('p');
         textParagraph.textContent = item.textInput;
 
-        // Display image input kun hvis det er lagt til en bilde url
+        itemBox.appendChild(textParagraph);
+
+        // Display image input only if there is a URL
         if (item.imageInput) {
-        const imageElement = document.createElement('img');
-        imageElement.src = item.imageInput;
-        imageElement.alt = 'Image';
-        imageElement.style.width = '500px';
-        imageElement.style.height = '500px';
-        itemBox.appendChild(imageElement);  
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'image-container';
+
+            const imageElement = document.createElement('img');
+            imageElement.src = item.imageInput;
+            imageElement.alt = 'Image';
+
+            imageContainer.appendChild(imageElement);
+            itemBox.appendChild(imageContainer);
         }
 
-        
-
-        itemBox.appendChild(textParagraph);
-        
         // Create a delete button
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
         deleteButton.className = 'delete-button';
-        deleteButton.addEventListener('click', () => deleteItem(item._id)); 
+        deleteButton.addEventListener('click', () => deleteItem(item._id));
 
-        // Append the box and delete button to the dataList
-        dataList.appendChild(itemBox);
-        dataList.appendChild(deleteButton);
+        // Append the delete button to the itemBox
+        itemBox.appendChild(deleteButton);
+
+        // Set a fixed height for each box
+        itemBox.style.height = fixedBoxHeight + 'px';
+
+        // Append the itemBox to the container
+        container.appendChild(itemBox);
     });
+
+    // Append the container to the dataList
+    dataList.appendChild(container);
 }
+
+
+
+
+
+
+
+
+
 
 
     // Funksjon for å slette data fra databasen
